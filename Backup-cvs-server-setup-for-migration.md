@@ -136,7 +136,7 @@ Step 9: Set CVSROOT Environment Variable
 
       vim .bash_profile
         # Add the following line:
-        export CVSROOT=:pserver:cvs@192.168.1.115:2401/home/cvs/Repositories
+        export CVSROOT=:pserver:cvs@server-ip:2401/home/cvs/Repositories
 
 
 Step 10: Install Git and Clone Migration Script
