@@ -3,6 +3,7 @@ Setting Up CVS Server on CentOS 7
 
 Step 1: Install Required Packages
   1.	Install CVS and xinetd:
+  
       yum install cvs xinetd
   2.	Verify CVS Installation:
       cvs -v
