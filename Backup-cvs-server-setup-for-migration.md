@@ -86,4 +86,61 @@ Step 7: Start and Enable xinetd Service
       systemctl enable xinetd.service
   3.	Check xinetd Service Status:
       systemctl status xinetd.service
-Following these steps will set up a CVS server on CentOS 7, ready to handle repository access through pserver.
+
+Step 8: Verify CVS Server
+  1.	Check if cvspserver is Listening:
+      netstat -l | grep cvspserver
+  2.	Check for Port 2401 Specifically:
+      netstat -ltnp | grep :2401
+
+Step 9: Set CVSROOT Environment Variable
+  1.	Navigate to Root's Home Directory:
+      cd /root
+  2.	Edit .bash_profile to Set CVSROOT:
+      vim .bash_profile
+        # Add the following line:
+        export CVSROOT=:pserver:cvs@192.168.1.115:2401/home/cvs/Repositories
+
+Step 10: Install Git and Clone Migration Script
+  1.	Install Git:
+      yum install git -y
+  2.	Clone the CVS-Git Migration Repository:
+      git clone https://github.com/kumaresangit/cvs-git-migration.git
+  3.	Navigate to the Cloned Repository:
+      cd cvs-git-migration
+  4.	Copy the Migration Script Archive:
+      cp cvs2svn-trunk.tar.gz ../.
+  5.	Extract the Migration Script Archive:
+      tar -xvzf cvs2svn-trunk.tar.gz
+
+Step 11: Convert CVS Repositories to Git
+  1.	Navigate to the Extracted Directory:
+      cd cvs2svn-trunk/
+  2.	Create Temporary Directory for Conversion:
+      mkdir cvs2git-tmp
+  3.	Run the CVS to Git Conversion:
+      python cvs2git --blobfile=cvs2git-tmp/git-blob.dat --dumpfile=cvs2git-tmp/git-dump.dat --username=cvs2git /home/cvs/Repositories/ --fallback-encoding=UTF-8
+  4.	Initialize a Bare Git Repository:
+      git init --bare /root/Repositories.git
+  5.	Navigate to the Git Repository:
+      cd /root/Repositories.git/
+  6.	Import Blob Data into Git:
+      git fast-import --export-marks=../cvs2svn-trunk/cvs2git-tmp/git-marks.dat <../cvs2svn-trunk/cvs2git-tmp/git-blob.dat
+  7.	Import Dump Data into Git:
+      git fast-import --import-marks=../cvs2svn-trunk/cvs2git-tmp/git-marks.dat <../cvs2svn-trunk/cvs2git-tmp/git-dump.dat
+  8.	Run Git Garbage Collection:
+      git gc --prune=now
+
+Following these steps will set up a CVS server on CentOS 7, migrate CVS repositories to Git, and verify that the server is listening on the correct port.
+
+
+
+
+
+
+
+
+
+
+
+
