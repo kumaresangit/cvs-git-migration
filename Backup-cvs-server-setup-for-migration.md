@@ -11,7 +11,10 @@ Step 1: Install Required Packages
 
 
 Step 2: Configure Firewall
-  1.	Add Firewall Rules:
+  1.	Disable SELINUX and Add Firewall Rules:
+
+      vi /etc/sysconfig/selinux
+        #Change the SELINUX=enforcing directive to SELINUX=disabled
 
       firewall-cmd --permanent --add-port=2401/tcp
       firewall-cmd --permanent --add-port=2401/udp
@@ -140,9 +143,10 @@ Step 9: Set CVSROOT Environment Variable
 
 
 Step 10: Install Git and Clone Migration Script
-  1.	Install Git:
+  1.	Install Git and python2.7 version:
 
       yum install git -y
+      yum install python27
   2.	Clone the CVS-Git Migration Repository:
 
       git clone https://github.com/kumaresangit/cvs-git-migration.git
